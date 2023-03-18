@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import pyautogui
+
 cam = cv2.VideoCapture(0)
 face_mesh = mp.solutions.face_mesh.FaceMesh(refine_landmarks=True)
 screen_w, screen_h = pyautogui.size()
@@ -13,21 +14,38 @@ while True:
     frame_h, frame_w, _ = frame.shape
     if landmark_points:
         landmarks = landmark_points[0].landmark
-        for id, landmark in enumerate(landmarks[474:478]):
-            x = int(landmark.x * frame_w)
-            y = int(landmark.y * frame_h)
-            cv2.circle(frame, (x, y), 3, (0, 255, 0))
-            if id == 1:
-                screen_x = screen_w * landmark.x
-                screen_y = screen_h * landmark.y
-                pyautogui.moveTo(screen_x, screen_y)
+
+        # Tracking middle of nose to move curstor
+        landmark = landmarks[6]            
+        x = int(landmark.x * frame_w)
+        y = int(landmark.y * frame_h)
+        cv2.circle(frame, (x, y), 3, (0, 255, 0))
+        screen_x = screen_w * landmark.x
+        screen_y = screen_h * landmark.y
+        pyautogui.moveTo(screen_x, screen_y)
+
+        # Left eye
         left = [landmarks[145], landmarks[159]]
         for landmark in left:
             x = int(landmark.x * frame_w)
             y = int(landmark.y * frame_h)
             cv2.circle(frame, (x, y), 3, (0, 255, 255))
-        if (left[0].y - left[1].y) < 0.009:
+        # Right eye
+        right = [landmarks[374], landmarks[386]]
+        for landmark in right:
+            x = int(landmark.x * frame_w)
+            y = int(landmark.y * frame_h)
+            cv2.circle(frame, (x, y), 3, (0, 255, 255))
+
+        if (left[0].y - left[1].y) < 0.009 and (right[0].y - right[1].y) < 0.006:
+            pass
+        elif (left[0].y - left[1].y) < 0.009:
             pyautogui.click()
             pyautogui.sleep(1)
+        elif (right[0].y - right[1].y) < 0.006:
+            pyautogui.click(button='right')
+            pyautogui.sleep(1)
+        
+
     cv2.imshow('Eye Controlled Mouse', frame)
     cv2.waitKey(1)
