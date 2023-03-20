@@ -24,8 +24,8 @@ while True:
         x = int(landmark.x * frame_w)
         y = int(landmark.y * frame_h)
         cv2.circle(frame, (x, y), 3, (0, 255, 0))
-        screen_x = screen_w * landmark.x
-        screen_y = screen_h * landmark.y
+        screen_x = screen_w * landmark.x * 1.1
+        screen_y = screen_h * landmark.y * 1.1
         pyautogui.moveTo(screen_x, screen_y)
 
         # Left eye
