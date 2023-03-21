@@ -5,6 +5,7 @@ import controls
 
 
 Scroll = controls.Scroll
+Drag = controls.Drag
 cam = cv2.VideoCapture(0)
 face_mesh = mp.solutions.face_mesh.FaceMesh(refine_landmarks=True)
 screen_w, screen_h = pyautogui.size()
@@ -49,11 +50,16 @@ while True:
         
         if abs(lips[0].y - lips[1].y) > 0.07:
             Scroll.scroll(landmark.y)
+            Drag.drag_started = False
         else:
             Scroll.scroll_started = False
-            if (left[0].y - left[1].y) < 0.009:
+            if (left[0].y - left[1].y) < 0.009 and (right[0].y - right[1].y) < 0.009:
+                Drag.drag()
+            elif (left[0].y - left[1].y) < 0.009:
+                Drag.drag_started = False
                 pyautogui.click()
             elif (right[0].y - right[1].y) < 0.009:
+                Drag.drag_started = False
                 pyautogui.click(button='right')
 
     cv2.imshow('Eye Controlled Mouse', frame)
