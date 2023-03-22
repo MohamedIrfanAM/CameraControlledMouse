@@ -24,26 +24,21 @@ class Scroll:
 
         if(abs(Scroll.previous_diff-Scroll.diff) <= Scroll.scroll_threshold):
             Scroll.frame_count += 1
-        else:
             Scroll.frame_count = 0
             Scroll.previous_diff = Scroll.diff
 
 class Drag:
-    drag_started = False
     clicked = False
-    frame_count = 0
 
     def drag():
         if(Drag.drag_started == True):
             Drag.frame_count += 1
             print(f"framecount: {Drag.frame_count}")
-        elif Drag.clicked == False:
+        else:
             Drag.frame_count = 0
-        Drag.drag_started = True
+            Drag.drag_started = True
         
         if(Drag.frame_count == 5):
-            Drag.drag_started = False
-            Drag.frame_count = 0
             if(Drag.clicked == False):
                 print("Drag started")
                 pyautogui.click()

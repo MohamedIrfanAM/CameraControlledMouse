@@ -61,6 +61,8 @@ while True:
             elif (right[0].y - right[1].y) < 0.009:
                 Drag.drag_started = False
                 pyautogui.click(button='right')
+            else:
+                Drag.drag_started = False
 
     cv2.imshow('Eye Controlled Mouse', frame)
     cv2.waitKey(1)
